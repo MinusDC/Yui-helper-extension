@@ -2,6 +2,19 @@
 
 Browser extension Manifest V3 hỗ trợ học tiếng Nhật trên trang web. Bôi đen văn bản tiếng Nhật để dịch sang tiếng Việt, xem Hiragana/Furigana hoặc tra nghĩa từ vựng.
 
+## Quick start for contributors
+
+```bash
+git clone <github-repo-url>
+cd Yui-helper-extension
+npm install
+npm run build
+```
+
+Sau đó mở Chrome hoặc Edge và tải extension từ thư mục `dist` theo hướng dẫn bên dưới.
+
+> Lưu ý: `dist/` là build output của extension, nên thường được bỏ qua khi commit lên GitHub. Repo gốc nên chỉ chứa source code và file cấu hình.
+
 ## Installation
 
 Yêu cầu Node.js 20+ và Chrome hoặc Microsoft Edge.
