@@ -1,0 +1,153 @@
+:root {
+  --sakura-50: #fff8fa;
+  --sakura-100: #fdf0f4;
+  --sakura-200: #f8d7e2;
+  --sakura-300: #efbfd1;
+  --sakura-400: #e88baa;
+  --sakura-500: #d37093;
+  --sakura-600: #cf2966;
+  --surface: #ffffff;
+  --surface-soft: #fffafc;
+  --border: #f1c5d3;
+  --text: #3f3540;
+  --text-muted: #7a6872;
+  --shadow: rgba(123, 87, 101, 0.12);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+}
+
+body {
+  background: linear-gradient(180deg, var(--sakura-50) 0%, #fffdfd 100%);
+  color: var(--text);
+  font-family:
+    Inter, 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif;
+  font-synthesis: none;
+  min-width: 380px;
+  width: min(380px, calc(100vw - 24px));
+}
+
+#jl-popup-app {
+  width: 100%;
+}
+
+.jl-popup-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+}
+
+.jl-popup-header {
+  align-items: center;
+  background: linear-gradient(
+    135deg,
+    rgba(232, 139, 170, 0.18),
+    rgba(248, 215, 226, 0.9)
+  );
+  border: 1px solid rgba(241, 197, 211, 0.9);
+  border-radius: 14px;
+  box-shadow: 0 8px 18px var(--shadow);
+  display: flex;
+  justify-content: space-between;
+  padding: 14px 14px 12px;
+}
+
+.jl-popup-title {
+  color: #e5186a;
+  font-size: 16px;
+  font-weight: 800;
+  margin: 0;
+}
+
+.jl-popup-subtitle {
+  color: var(--text-muted);
+  font-size: 12px;
+  margin: 4px 0 0;
+}
+
+.jl-popup-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(128, 98, 111, 0.08);
+  padding: 12px;
+}
+
+.jl-popup-section:last-child {
+  padding-bottom: 12px;
+}
+
+.jl-popup-heading {
+  color: #e50072;
+  font-size: 11px;
+  font-weight: 750;
+  letter-spacing: 0.08em;
+  margin: 0 0 8px;
+  text-transform: uppercase;
+}
+
+.jl-popup-toggle {
+  align-items: center;
+  background: var(--surface-soft);
+  border: 1px solid #f4dde7;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  font-size: 13px;
+  gap: 8px;
+  padding: 8px 10px;
+}
+
+.jl-popup-toggle input {
+  accent-color: var(--sakura-500);
+  height: 16px;
+  width: 16px;
+}
+
+.jl-popup-list {
+  list-style: none;
+  margin: 0;
+  max-height: 156px;
+  overflow: auto;
+  padding: 0;
+}
+
+.jl-popup-list-item {
+  border-bottom: 1px solid #f5e4ea;
+  font-size: 13px;
+  padding: 9px 0;
+}
+
+.jl-popup-list-item:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.jl-popup-reading,
+.jl-popup-meta,
+.jl-popup-empty,
+.jl-popup-error {
+  color: var(--text-muted);
+  font-size: 11px;
+  margin-top: 2px;
+}
+
+.jl-popup-error {
+  color: #c05c75;
+}
+
+.jl-popup-empty {
+  margin: 0;
+}
+
+input:focus-visible {
+  outline: 3px solid #f80a89;
+  outline-offset: 2px;
+}

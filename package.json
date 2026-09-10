@@ -1,0 +1,25 @@
+{
+  "name": "japanese-learning-assistant-extension",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "A Manifest V3 Japanese learning assistant for Chromium browsers.",
+  "scripts": {
+    "clean": "node scripts/clean.mjs",
+    "copy:dict": "node scripts/copy-kuromoji-dict.mjs",
+    "copy:static": "node scripts/copy-static.mjs",
+    "build:content": "esbuild src/content/index.js --bundle --format=iife --target=chrome114 --outfile=dist/content.js",
+    "build:background": "esbuild src/background/index.js --bundle --format=esm --target=chrome114 --outfile=dist/background.js",
+    "build:popup": "esbuild src/popup/index.js --bundle --format=esm --target=chrome114 --outfile=dist/popup.js",
+    "build": "npm run clean && npm run copy:dict && npm run build:content && npm run build:background && npm run build:popup && npm run copy:static",
+    "check": "node scripts/check-build.mjs",
+    "test": "node --test tests/text.test.mjs tests/ui-state.test.mjs",
+    "test:browser": "node --test tests/browser-selection.test.mjs"
+  },
+  "dependencies": {
+    "kuromoji": "^0.1.2"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.0"
+  }
+}
