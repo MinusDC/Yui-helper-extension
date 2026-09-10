@@ -2,9 +2,8 @@ import { CACHE_LIMIT, REQUEST_TIMEOUT_MS } from '../utils/constants.js';
 import { BoundedCache } from './bounded-cache.js';
 import { ServiceError } from './service-error.js';
 
-// const TRANSLATION_ENDPOINT =  'https://translate.googleapis.com/translate_a/single';
 const TRANSLATION_ENDPOINT =
-  'https://api.mymemory.translated.net/get?q=Hello%20World&langpair=en|vi';
+  'https://translate.googleapis.com/translate_a/single';
 
 export class TranslationService {
   constructor() {
