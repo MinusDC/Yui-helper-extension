@@ -10,6 +10,7 @@ export class SelectionPopup {
     this.currentDictionary = null;
     this.currentReading = '';
     this.isBusy = false;
+    this.dragState = null;
     this.host = document.createElement('div');
     this.host.id = 'jl-selection-host';
     this.host.setAttribute('data-jl-owned', 'true');
@@ -19,6 +20,10 @@ export class SelectionPopup {
     this.shadowRoot = this.host.attachShadow({ mode: 'closed' });
     this.shadowRoot.append(this.createStyle(), this.createView());
     document.documentElement.append(this.host);
+
+    document.addEventListener('pointermove', (event) => this.handlePointerMove(event));
+    document.addEventListener('pointerup', () => this.handlePointerUp());
+    document.addEventListener('pointercancel', () => this.handlePointerUp());
   }
 
   show({ text, rect }) {
@@ -37,6 +42,10 @@ export class SelectionPopup {
     this.currentText = '';
     this.currentDictionary = null;
     this.currentReading = '';
+    this.dragState = null;
+    if (this.header) {
+      this.header.classList.remove('jl-header-dragging');
+    }
   }
 
   contains(node) {
@@ -110,9 +119,15 @@ export class SelectionPopup {
         align-items: center;
         background: linear-gradient(135deg, rgba(255, 57, 169, 0.61), rgba(246, 78, 134, 0.9));
         border-bottom: 1px solid #e52d67;
+        cursor: grab;
         display: flex;
         justify-content: space-between;
         padding: 10px 12px;
+        touch-action: none;
+        user-select: none;
+      }
+      .jl-header-dragging {
+        cursor: grabbing;
       }
       .jl-title {
         color: #94003b;
@@ -233,11 +248,21 @@ export class SelectionPopup {
     card.setAttribute('aria-label', 'Japanese Learning Assistant');
 
     const header = createElement('div', 'jl-header');
+    this.header = header;
     header.append(createElement('span', 'jl-title', 'JP ゆいちゃん'));
     this.closeButton = createElement('button', 'jl-close', '×');
     this.closeButton.type = 'button';
     this.closeButton.setAttribute('aria-label', 'Đóng trợ lý tiếng Nhật');
     this.closeButton.addEventListener('click', () => this.onClose());
+    header.addEventListener('pointerdown', (event) => {
+      if (event.button !== 0 || event.target.closest?.('.jl-close')) {
+        return;
+      }
+
+      event.preventDefault();
+      event.stopPropagation();
+      this.beginDrag(event);
+    });
     header.append(this.closeButton);
 
     this.selectedTextElement = createElement('div', 'jl-selected');
@@ -286,6 +311,44 @@ export class SelectionPopup {
     button.addEventListener('mousedown', preventSelectionLoss);
     button.addEventListener('click', handler);
     return button;
+  }
+
+  beginDrag(event) {
+    const popupWidth = this.card.offsetWidth || POPUP_WIDTH;
+    const popupHeight = this.card.offsetHeight || 160;
+
+    this.dragState = {
+      startX: event.clientX,
+      startY: event.clientY,
+      originLeft: Number.parseFloat(this.host.style.left) || (window.innerWidth - popupWidth - VIEWPORT_MARGIN) / 2,
+      originTop: Number.parseFloat(this.host.style.top) || VIEWPORT_MARGIN,
+      popupWidth,
+      popupHeight
+    };
+
+    this.header.classList.add('jl-header-dragging');
+  }
+
+  handlePointerMove(event) {
+    if (!this.dragState) {
+      return;
+    }
+
+    const { startX, startY, originLeft, originTop, popupWidth, popupHeight } = this.dragState;
+    const left = clamp(originLeft + (event.clientX - startX), VIEWPORT_MARGIN, window.innerWidth - popupWidth - VIEWPORT_MARGIN);
+    const top = clamp(originTop + (event.clientY - startY), VIEWPORT_MARGIN, window.innerHeight - popupHeight - VIEWPORT_MARGIN);
+
+    this.host.style.left = `${Math.round(left)}px`;
+    this.host.style.top = `${Math.round(top)}px`;
+  }
+
+  handlePointerUp() {
+    if (!this.dragState) {
+      return;
+    }
+
+    this.dragState = null;
+    this.header.classList.remove('jl-header-dragging');
   }
 
   setSelectionText(value) {
