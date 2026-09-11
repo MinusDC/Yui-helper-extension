@@ -18,7 +18,6 @@ const trigger = new SelectionTrigger({ onActivate: openPopupFromTrigger });
 
 loadSettings();
 document.addEventListener('selectionchange', scheduleSelectionProcessing, { passive: true });
-document.addEventListener('mousedown', handleDocumentMouseDown, true);
 document.addEventListener('keydown', handleDocumentKeyDown, true);
 window.addEventListener('resize', keepUiInViewport, { passive: true });
 window.addEventListener('scroll', keepUiInViewport, { passive: true, capture: true });
@@ -92,14 +91,6 @@ function openPopupFromTrigger() {
   }
 
   popup.show(activeSelection);
-}
-
-function handleDocumentMouseDown(event) {
-  if (popup.containsEvent(event) || trigger.containsEvent(event)) {
-    return;
-  }
-
-  resetUi();
 }
 
 function handleDocumentKeyDown(event) {
