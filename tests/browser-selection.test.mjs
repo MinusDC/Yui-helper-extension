@@ -87,15 +87,19 @@ test('selection trigger opens the assistant only on click and survives scroll', 
 
     await selectElement(pageClient, 'english');
     await wait(320);
-    assert.deepEqual(await readUiState(pageClient), { triggerVisible: false, popupVisible: false, triggerCount: 1, popupCount: 1 });
+    assert.deepEqual(await readUiState(pageClient), { triggerVisible: false, popupVisible: true, triggerCount: 1, popupCount: 1 });
 
     await selectElement(pageClient, 'hiragana');
     await wait(320);
-    assert.deepEqual(await readUiState(pageClient), { triggerVisible: true, popupVisible: false, triggerCount: 1, popupCount: 1 });
+    assert.deepEqual(await readUiState(pageClient), { triggerVisible: true, popupVisible: true, triggerCount: 1, popupCount: 1 });
 
     await clickAt(pageClient, 10, 10);
     await wait(60);
-    assert.equal((await readUiState(pageClient)).triggerVisible, false, 'outside click closes trigger/popup UI');
+    assert.equal((await readUiState(pageClient)).popupVisible, true, 'outside click keeps popup open');
+
+    await clickPopupClose(pageClient);
+    await wait(60);
+    assert.deepEqual(await readUiState(pageClient), { triggerVisible: false, popupVisible: false, triggerCount: 1, popupCount: 1 });
   } finally {
     pageClient?.close();
     browserClient?.close();
@@ -154,6 +158,15 @@ async function clickHost(client, selector) {
     const element = document.querySelector('${selector}');
     const box = element.getBoundingClientRect();
     return { x: box.left + Math.min(12, box.width / 2), y: box.top + Math.min(12, box.height / 2) };
+  })()`);
+  await clickAt(client, rect.x, rect.y);
+}
+
+async function clickPopupClose(client) {
+  const rect = await evaluate(client, `(() => {
+    const element = document.querySelector('#jl-selection-host');
+    const box = element.getBoundingClientRect();
+    return { x: box.right - 24, y: box.top + 24 };
   })()`);
   await clickAt(client, rect.x, rect.y);
 }

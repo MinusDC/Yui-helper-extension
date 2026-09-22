@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "ゆいちゃん",
-  "version": "0.1.1",
-  "description": "Translate selected Japanese text, see readings, furigana, and dictionary details.",
+  "version": "0.1.2",
+  "description": "Translate selected Japanese text, see readings, furigana, and dictionary details. Made by MinusDC",
   "permissions": ["storage"],
   "host_permissions": [
     "https://translate.googleapis.com/*",
@@ -13,7 +13,7 @@
     "type": "module"
   },
   "action": {
-    "default_title": "Japanese Learning Assistant",
+    "default_title": "ゆいちゃん　- Japanese Learning Assistant",
     "default_popup": "popup.html"
   },
   "content_scripts": [

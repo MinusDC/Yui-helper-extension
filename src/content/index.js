@@ -61,12 +61,24 @@ function processSelection() {
 
   const text = normalizeSelectedText(selection?.toString());
   if (!text || !containsJapanese(text) || selection?.rangeCount === 0) {
+    if (uiState.is(UI_STATE.POPUP_OPEN)) {
+      activeSelection = null;
+      trigger.hide();
+      return;
+    }
+
     resetUi();
     return;
   }
 
   const rect = selection.getRangeAt(0).getBoundingClientRect();
   if (!hasVisibleSelectionRect(rect)) {
+    if (uiState.is(UI_STATE.POPUP_OPEN)) {
+      activeSelection = null;
+      trigger.hide();
+      return;
+    }
+
     resetUi();
     return;
   }
@@ -75,9 +87,6 @@ function processSelection() {
   trigger.show(rect);
 
   if (uiState.is(UI_STATE.POPUP_OPEN)) {
-    // An open assistant follows an intentional new Japanese selection without
-    // creating a second popup instance.
-    popup.show(activeSelection);
     return;
   }
 
@@ -86,7 +95,7 @@ function processSelection() {
 }
 
 function openPopupFromTrigger() {
-  if (!activeSelection || uiState.is(UI_STATE.POPUP_OPEN) || !uiState.openPopup()) {
+  if (!activeSelection || !uiState.openPopup()) {
     return;
   }
 
@@ -94,7 +103,7 @@ function openPopupFromTrigger() {
 }
 
 function handleDocumentKeyDown(event) {
-  if (event.key === 'Escape' && !uiState.is(UI_STATE.IDLE)) {
+  if (event.key === 'Escape' && uiState.is(UI_STATE.TRIGGER_VISIBLE)) {
     resetUi();
   }
 }
